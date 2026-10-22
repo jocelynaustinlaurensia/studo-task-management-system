@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STUDO - Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; display: flex; background: #f0f4f8; }
+
+    .left {
+      flex: 0 0 42%;
+      background: #0d2b45;
+      display: flex;
+      flex-direction: column;
+      padding: 2.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .left::before {
+      content: '';
+      position: absolute;
+      width: 350px; height: 350px;
+      border-radius: 50%;
+      background: rgba(91,184,245,0.06);
+      bottom: -80px; right: -80px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-icon { width: 38px; height: 38px; background: rgba(91,184,245,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .brand-icon svg { width: 20px; height: 20px; color: #5bb8f5; }
+    .brand-name { font-size: 14px; font-weight: 600; color: #c8dff0; }
+    .left-content { flex: 1; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 1; }
+    .left-content h1 { font-size: 2rem; font-weight: 700; color: #fff; line-height: 1.25; margin-bottom: 1.2rem; }
+    .left-content p { font-size: 14px; color: #7da8c9; line-height: 1.7; max-width: 280px; }
+
+    .right { flex: 1; background: #fff; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .form-box { width: 100%; max-width: 340px; }
+    .form-logo { text-align: center; margin-bottom: 1.8rem; }
+    .logo-mark { display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; background: #1a5a8a; border-radius: 16px; margin-bottom: 10px; }
+    .logo-mark svg { width: 28px; height: 28px; color: #fff; }
+    .studo-label { display: block; font-size: 17px; font-weight: 700; color: #1a72c7; letter-spacing: 4px; }
+    .form-title { text-align: center; margin-bottom: 2rem; }
+    .form-title h2 { font-size: 20px; font-weight: 700; color: #0d1b2a; margin-bottom: 5px; }
+    .form-title p { font-size: 13px; color: #8a9ab0; }
+    .field { margin-bottom: 1.1rem; }
+    .field label { display: block; font-size: 13px; font-weight: 600; color: #3d5166; margin-bottom: 7px; }
+    .input-wrap { position: relative; }
+    .input-wrap input { width: 100%; padding: 11px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 14px; font-family: inherit; color: #0d1b2a; background: #f8fafc; outline: none; transition: border-color 0.2s; }
+    .input-wrap input:focus { border-color: #1a72c7; background: #fff; }
+    .input-wrap input::placeholder { color: #b0bec8; }
+    .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #9ab0c4; display: flex; padding: 0; }
+    .btn-signin { width: 100%; padding: 12px; background: #1a5a8a; border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 0.4rem; transition: background 0.2s, transform 0.1s; }
+    .btn-signin:hover { background: #154d7a; }
+    .btn-signin:active { transform: scale(0.98); }
+    .btn-signin svg { width: 18px; height: 18px; }
+    .error-msg { display: none; background: #fff0f0; border: 1px solid #fcc; color: #c0392b; font-size: 13px; padding: 10px 14px; border-radius: 8px; margin-bottom: 1rem; text-align: center; }
+    .error-msg.show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="left">
+    <div class="brand">
+      <div class="nav-brand-icon">
+  <img src="logo-studo.jpeg" alt="STUDO" style="width: 24px; height: 24px; object-fit: contain;"/>
+</div>
+      <span class="brand-name">Student To Do List</span>
+    </div>
+    <div class="left-content">
+      <h1>Smart Application Management Assignment</h1>
+      <p>An assignment management platform that makes it easy for students to organize and complete assignments on time.</p>
+    </div>
+  </div>
+
+  <div class="right">
+    <div class="form-box">
+      <div class="form-logo">
+        <div class="nav-brand-logo-mark">
+  <img src="logo-studo.jpeg" alt="STUDO" style="width: 24px; height: 24px; object-fit: contain;"/>
+</div>
+        <span class="studo-label">STUDO</span>
+      </div>
+      <div class="form-title">
+        <h2>Welcome back</h2>
+        <p>Sign in to your account to continue</p>
+      </div>
+      <div class="error-msg" id="errorMsg">Username atau password salah.</div>
+      <div class="field">
+        <label for="username">Username</label>
+        <div class="input-wrap">
+          <input type="text" id="username" placeholder="Masukkan username" autocomplete="off"/>
+        </div>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="password" placeholder="Masukkan password"/>
+          <button class="eye-btn" type="button" id="togglePw">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <button class="btn-signin" id="loginBtn">
+        Sign In
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('togglePw').addEventListener('click', function() {
+      const pw = document.getElementById('password');
+      if (pw.type === 'password') {
+        pw.type = 'text';
+        this.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>`;
+      } else {
+        pw.type = 'password';
+        this.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>`;
+      }
+    });
+
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorMsg = document.getElementById('errorMsg');
+      errorMsg.classList.remove('show');
+
+      if (!username || !password) {
+        errorMsg.textContent = 'Username dan password harus diisi.';
+        errorMsg.classList.add('show');
+        return;
+      }
+
+      try {
+        const res = await fetch('http://localhost:3000/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          sessionStorage.setItem('user', JSON.stringify({ name: data.name, username }));
+          window.location.href = 'dashboard.html';
+        } else {
+          errorMsg.textContent = data.message || 'Username atau password salah.';
+          errorMsg.classList.add('show');
+        }
+      } catch (err) {
+        errorMsg.textContent = 'Tidak bisa terhubung ke server. Pastikan backend berjalan.';
+        errorMsg.classList.add('show');
+      }
+    });
+
+    document.getElementById('password').addEventListener('keydown', e => {
+      if (e.key === 'Enter') document.getElementById('loginBtn').click();
+    });
+  </script>
+</body>
+</html>

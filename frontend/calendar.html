@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STUDO - Calendar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .back-bar {
+      background: #fff;
+      border-bottom: 1px solid #e8edf2;
+      padding: 0.65rem 2rem;
+    }
+    .back-bar a {
+      font-size: 13px;
+      color: #0d1b2a;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+    .back-bar a svg { width: 14px; height: 14px; }
+    .back-bar a:hover { color: #1a72c7; }
+
+    .cal-layout {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    /* MINI CALENDAR */
+    .mini-cal-wrap {
+      flex-shrink: 0;
+      width: 175px;
+    }
+    .mini-cal-icon {
+      width: 36px; height: 36px;
+      background: #2e7d32;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 6px;
+    }
+    .mini-cal-icon svg { width: 20px; height: 20px; color: #fff; }
+    .mini-cal-label { font-size: 13px; font-weight: 600; color: #0d1b2a; margin-bottom: 8px; }
+
+    .mini-cal {
+      background: #1a5a8a;
+      border-radius: 12px;
+      padding: 0.75rem;
+      color: #fff;
+    }
+    .mini-cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .mini-cal-nav {
+      display: flex;
+      gap: 4px;
+    }
+    .mini-cal-nav button {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 4px;
+      width: 20px; height: 20px;
+      cursor: pointer;
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0;
+    }
+    .mini-cal-nav button svg { width: 12px; height: 12px; }
+
+    .mini-cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      text-align: center;
+    }
+    .mini-day-header {
+      font-size: 10px;
+      font-weight: 600;
+      opacity: 0.7;
+      padding: 2px 0;
+    }
+    .mini-day {
+      font-size: 11px;
+      padding: 3px 0;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .mini-day:hover { background: rgba(255,255,255,0.2); }
+    .mini-day.today { background: #fff; color: #1a5a8a; font-weight: 700; border-radius: 50%; }
+    .mini-day.empty { opacity: 0; pointer-events: none; }
+
+    /* WEEKLY CALENDAR */
+    .weekly-wrap { flex: 1; min-width: 0; }
+    .weekly-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0;
+      background: #1a5a8a;
+      border-radius: 10px 10px 0 0;
+      padding: 8px 12px;
+      color: #fff;
+    }
+    .weekly-nav {
+      display: flex;
+      gap: 4px;
+    }
+    .weekly-nav button {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      border-radius: 6px;
+      width: 24px; height: 24px;
+      cursor: pointer;
+      color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0;
+    }
+    .weekly-nav button svg { width: 14px; height: 14px; }
+    .weekly-month { font-size: 14px; font-weight: 700; }
+
+    .weekly-grid {
+      border: 1px solid #1a5a8a;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      overflow: hidden;
+    }
+
+    .weekly-days-row {
+      display: grid;
+      grid-template-columns: 48px repeat(7, 1fr);
+      background: #1e6fa8;
+    }
+    .weekly-day-cell {
+      text-align: center;
+      padding: 6px 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      border-left: 1px solid rgba(255,255,255,0.15);
+    }
+    .weekly-day-cell:first-child { border-left: none; }
+
+    .weekly-body {
+      max-height: 340px;
+      overflow-y: auto;
+    }
+    .weekly-body::-webkit-scrollbar { width: 4px; }
+    .weekly-body::-webkit-scrollbar-track { background: #f0f4f8; }
+    .weekly-body::-webkit-scrollbar-thumb { background: #b0c4d8; border-radius: 99px; }
+
+    .weekly-time-row {
+      display: grid;
+      grid-template-columns: 48px repeat(7, 1fr);
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .weekly-time-row:first-child { border-top: none; }
+
+    .time-label {
+      font-size: 10px;
+      color: #fff;
+      background: #1a5a8a;
+      padding: 4px 6px;
+      text-align: right;
+      border-right: 1px solid rgba(255,255,255,0.15);
+    }
+    .time-slot {
+      background: #1e6fa8;
+      border-left: 1px solid rgba(255,255,255,0.08);
+      min-height: 28px;
+    }
+    .time-slot:hover { background: #2478b8; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="dashboard.html" class="nav-brand">
+      <div class="nav-brand-icon">
+  <img src="logo-studo.jpeg" alt="STUDO" style="width: 24px; height: 24px; object-fit: contain;"/>
+</div>
+      <span class="nav-brand-name">Studo</span>
+    </a>
+    <div class="nav-search">
+      <svg class="nav-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z"/>
+      </svg>
+      <input type="text" placeholder="Search Assignment"/>
+    </div>
+    <div class="nav-right">
+      <div class="nav-bell">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+      </div>
+      <div class="nav-user">
+        <div class="nav-avatar" id="navAvatar">M</div>
+        <div class="nav-user-info">
+          <div class="nav-user-name" id="navName">Mahasiswa</div>
+          <div class="nav-user-role">Student</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BACK BAR -->
+  <div class="back-bar">
+    <a href="dashboard.html">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      Back to Dashboard
+    </a>
+  </div>
+
+  <div class="page-content">
+    <div class="dashboard-grid">
+      <div>
+        <!-- HERO BANNER -->
+        <div class="hero-banner" style="margin-bottom: 1.5rem;">
+          <div class="hero-text">
+            <h2 id="heroName">Welcome Back, Mahasiswa!</h2>
+            <p>Here's your learning progress today.</p>
+            <div class="progress-label">
+              <span>Daily Study Goal</span>
+              <span>55%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 55%;"></div>
+            </div>
+            <div class="progress-note">2 assignment of 4 assignment completed</div>
+          </div>
+          <div class="hero-gpa">
+            <div class="hero-gpa-label">Current GPA</div>
+            <div class="hero-gpa-value">3.45</div>
+          </div>
+        </div>
+
+        <!-- CALENDAR SECTION -->
+        <div class="cal-layout">
+
+          <!-- MINI CALENDAR -->
+          <div class="mini-cal-wrap">
+            <div class="mini-cal-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <div class="mini-cal-label">Calender</div>
+            <div class="mini-cal">
+              <div class="mini-cal-header">
+                <div class="mini-cal-nav">
+                  <button id="miniPrev">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                  </button>
+                </div>
+                <span id="miniMonthLabel">June 2026</span>
+                <div class="mini-cal-nav">
+                  <button id="miniNext">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="mini-cal-grid" id="miniCalGrid"></div>
+            </div>
+          </div>
+
+          <!-- WEEKLY CALENDAR -->
+          <div class="weekly-wrap">
+            <div class="weekly-header">
+              <div class="weekly-nav">
+                <button id="weekPrev">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button id="weekNext">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </button>
+              </div>
+              <span class="weekly-month" id="weekLabel">June 2026</span>
+            </div>
+            <div class="weekly-grid">
+              <div class="weekly-days-row" id="weekDaysRow"></div>
+              <div class="weekly-body" id="weekBody"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div>
+        <div class="profile-card">
+          <div class="profile-card-title">Profile Summary</div>
+          <div class="profile-avatar-wrap" id="sideAvatar">M</div>
+          <div class="profile-name" id="sideName">Mahasiswa</div>
+          <div class="profile-id">Student ID: 535240015</div>
+          <div class="profile-gpa">Current GPA: 3.45</div>
+         <div class="profile-logo">
+  <img src="logo-untar.png" alt="Logo Untar" style="width: 80px; height: 80px; object-fit: contain;"/>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // USER
+    const user = JSON.parse(sessionStorage.getItem('user') || '{"name":"Mahasiswa"}');
+    document.getElementById('navName').textContent = user.name;
+    document.getElementById('navAvatar').textContent = user.name.charAt(0).toUpperCase();
+    document.getElementById('heroName').textContent = `Welcome Back, ${user.name}!`;
+    document.getElementById('sideName').textContent = user.name;
+    document.getElementById('sideAvatar').textContent = user.name.charAt(0).toUpperCase();
+
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const dayNames = ['S','M','T','W','T','F','S'];
+    const dayNamesFull = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const hours = ['11am','1am','2am','3am','4am','5am','6am','7am','8am','9am','10am','11am','12pm','1pm','2pm','3pm'];
+
+    // MINI CALENDAR
+    let miniDate = new Date(2026, 5, 1);
+    function renderMini() {
+      const year = miniDate.getFullYear();
+      const month = miniDate.getMonth();
+      document.getElementById('miniMonthLabel').textContent = `${months[month]} ${year}`;
+      const grid = document.getElementById('miniCalGrid');
+      grid.innerHTML = '';
+      dayNames.forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'mini-day-header';
+        el.textContent = d;
+        grid.appendChild(el);
+      });
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const today = new Date();
+      for (let i = 0; i < firstDay; i++) {
+        const el = document.createElement('div');
+        el.className = 'mini-day empty';
+        el.textContent = '.';
+        grid.appendChild(el);
+      }
+      for (let d = 1; d <= daysInMonth; d++) {
+        const el = document.createElement('div');
+        let cls = 'mini-day';
+        if (d === today.getDate() && month === today.getMonth() && year === today.getFullYear()) cls += ' today';
+        el.className = cls;
+        el.textContent = d;
+        grid.appendChild(el);
+      }
+    }
+    document.getElementById('miniPrev').addEventListener('click', () => { miniDate.setMonth(miniDate.getMonth() - 1); renderMini(); });
+    document.getElementById('miniNext').addEventListener('click', () => { miniDate.setMonth(miniDate.getMonth() + 1); renderMini(); });
+    renderMini();
+
+    // WEEKLY CALENDAR
+    let weekStart = new Date(2026, 5, 1); // June 1 2026 (Monday)
+    function getWeekDays(start) {
+      const days = [];
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(start);
+        d.setDate(start.getDate() + i);
+        days.push(d);
+      }
+      return days;
+    }
+    function renderWeekly() {
+      const days = getWeekDays(weekStart);
+      document.getElementById('weekLabel').textContent = `${months[weekStart.getMonth()]} ${weekStart.getFullYear()}`;
+
+      // Days row
+      const daysRow = document.getElementById('weekDaysRow');
+      daysRow.innerHTML = '<div class="weekly-day-cell"></div>';
+      days.forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'weekly-day-cell';
+        el.textContent = `${d.getDate()}\n${dayNamesFull[d.getDay()]}`;
+        el.style.whiteSpace = 'pre';
+        daysRow.appendChild(el);
+      });
+
+      // Body
+      const body = document.getElementById('weekBody');
+      body.innerHTML = '';
+      hours.forEach(h => {
+        const row = document.createElement('div');
+        row.className = 'weekly-time-row';
+        const timeCell = document.createElement('div');
+        timeCell.className = 'time-label';
+        timeCell.textContent = h;
+        row.appendChild(timeCell);
+        for (let i = 0; i < 7; i++) {
+          const slot = document.createElement('div');
+          slot.className = 'time-slot';
+          row.appendChild(slot);
+        }
+        body.appendChild(row);
+      });
+    }
+    document.getElementById('weekPrev').addEventListener('click', () => { weekStart.setDate(weekStart.getDate() - 7); renderWeekly(); });
+    document.getElementById('weekNext').addEventListener('click', () => { weekStart.setDate(weekStart.getDate() + 7); renderWeekly(); });
+    renderWeekly();
+  </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1781357613512,
+    "title": "fisika",
+    "lecturer": "agus",
+    "deadline": "2026-06-16T07:00:00.000Z",
+    "status": "completed"
+  },
+  {
+    "id": 1781361685449,
+    "title": "Fisika",
+    "lecturer": "Agus",
+    "deadline": "No Deadline",
+    "status": "ongoing"
+  },
+  {
+    "id": 1781502419012,
+    "title": "bahasa asing",
+    "lecturer": "jonson",
+    "deadline": "No Deadline",
+    "status": "pastdue"
+  }
+]

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STUDO - Activity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .back-bar {
+      background: #fff;
+      border-bottom: 1px solid #e8edf2;
+      padding: 0.65rem 2rem;
+    }
+    .back-bar a {
+      font-size: 13px;
+      color: #0d1b2a;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+    .back-bar a svg { width: 14px; height: 14px; }
+    .back-bar a:hover { color: #1a72c7; }
+
+    .activity-feed { display: flex; flex-direction: column; gap: 1.25rem; }
+    .feed-item {
+      background: #fff;
+      border: 1px solid #e8edf2;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .feed-banner {
+      width: 100%;
+      height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 1rem 1.5rem;
+    }
+    .feed-banner-text {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: 1px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+    .feed-banner-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.8);
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+    .feed-info { padding: 0.75rem 1.25rem; }
+    .feed-lecturer { font-size: 13px; color: #5a7a94; margin-bottom: 2px; }
+    .feed-due { font-size: 13px; color: #0d1b2a; font-weight: 600; margin-bottom: 3px; }
+    .feed-time { font-size: 12px; color: #aab8c5; display: flex; align-items: center; gap: 4px; }
+    .feed-time svg { width: 12px; height: 12px; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="dashboard.html" class="nav-brand">
+      <div class="nav-brand-icon">
+  <img src="logo-studo.jpeg" alt="STUDO" style="width: 24px; height: 24px; object-fit: contain;"/>
+</div>
+      <span class="nav-brand-name">Studo</span>
+    </a>
+    <div class="nav-search">
+      <svg class="nav-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z"/>
+      </svg>
+      <input type="text" placeholder="Search Assignment"/>
+    </div>
+    <div class="nav-right">
+      <div class="nav-bell">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+      </div>
+      <div class="nav-user">
+        <div class="nav-avatar" id="navAvatar">M</div>
+        <div class="nav-user-info">
+          <div class="nav-user-name" id="navName">Mahasiswa</div>
+          <div class="nav-user-role">Student</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BACK BAR -->
+  <div class="back-bar">
+    <a href="dashboard.html">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+      Back to Dashboard
+    </a>
+  </div>
+
+  <div class="page-content">
+    <div class="dashboard-grid">
+      <div>
+        <!-- HERO BANNER -->
+        <div class="hero-banner" style="margin-bottom: 1.5rem;">
+          <div class="hero-text">
+            <h2 id="heroName">Welcome Back, Mahasiswa!</h2>
+            <p>Here's your learning progress today.</p>
+            <div class="progress-label">
+              <span>Daily Study Goal</span>
+              <span>55%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 55%;"></div>
+            </div>
+            <div class="progress-note">2 assignment of 4 assignment completed</div>
+          </div>
+          <div class="hero-gpa">
+            <div class="hero-gpa-label">Current GPA</div>
+            <div class="hero-gpa-value">3.45</div>
+          </div>
+        </div>
+
+        <!-- ACTIVITY FEED -->
+        <div class="section-header">
+          <span class="section-title">Activity</span>
+        </div>
+
+        <div class="activity-feed">
+          <div class="feed-item">
+            <div class="feed-banner" style="background: linear-gradient(135deg, #7b5e3a, #c4a26b);">
+              <span class="feed-banner-text">HUMANIORA</span>
+              <span class="feed-banner-sub">EKSLORASI BUDAYA, FILSAFAT, SENI, DAN SEJARAH MANUSIA</span>
+            </div>
+            <div class="feed-info">
+              <div class="feed-lecturer">Viny Christanti.M added an assignment</div>
+              <div class="feed-due">Due Today 2026</div>
+              <div class="feed-time">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Today, 9:00 AM
+              </div>
+            </div>
+          </div>
+
+          <div class="feed-item">
+            <div class="feed-banner" style="background: linear-gradient(135deg, #0d3b6e, #1565c0);">
+              <span class="feed-banner-text">BIG DATA</span>
+              <span class="feed-banner-sub">PROGRAM STUDI INFORMATIKA</span>
+            </div>
+            <div class="feed-info">
+              <div class="feed-lecturer">Teny Handayani added an assignment</div>
+              <div class="feed-due">Due Tomorrow 2026</div>
+              <div class="feed-time">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Tomorrow, 12:00 PM
+              </div>
+            </div>
+          </div>
+
+          <div class="feed-item">
+            <div class="feed-banner" style="background: linear-gradient(135deg, #1b3a2f, #2e7d52);">
+              <span class="feed-banner-text">PENGEMBANGAN PERANGKAT LUNAK</span>
+              <span class="feed-banner-sub">SOFTWARE DEVELOPMENT</span>
+            </div>
+            <div class="feed-info">
+              <div class="feed-lecturer">Desi Arisandi added an assignment</div>
+              <div class="feed-due">Due 2 days left 2026</div>
+              <div class="feed-time">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                2 days left, 9:00 PM
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div>
+        <div class="profile-card">
+          <div class="profile-card-title">Profile Summary</div>
+          <div class="profile-avatar-wrap" id="sideAvatar">M</div>
+          <div class="profile-name" id="sideName">Mahasiswa</div>
+          <div class="profile-id">Student ID: 535240015</div>
+          <div class="profile-gpa">Current GPA: 3.45</div>
+          <div class="profile-logo">
+  <img src="logo-untar.png" alt="Logo Untar" style="width: 80px; height: 80px; object-fit: contain;"/>
+</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const user = JSON.parse(sessionStorage.getItem('user') || '{"name":"Mahasiswa"}');
+    document.getElementById('navName').textContent = user.name;
+    document.getElementById('navAvatar').textContent = user.name.charAt(0).toUpperCase();
+    document.getElementById('heroName').textContent = `Welcome Back, ${user.name}!`;
+    document.getElementById('sideName').textContent = user.name;
+    document.getElementById('sideAvatar').textContent = user.name.charAt(0).toUpperCase();
+  </script>
+</body>
+</html>

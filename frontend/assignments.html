@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STUDO - Assignments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .back-bar { background:#fff; border-bottom:1px solid #e8edf2; padding:0.65rem 2rem; }
+    .back-bar a { font-size:13px; color:#0d1b2a; text-decoration:none; display:inline-flex; align-items:center; gap:6px; font-weight:500; }
+    .back-bar a:hover { color:#1a72c7; }
+    .back-bar a svg { width:14px; height:14px; }
+    .tab-btn { font-size:14px; font-weight:600; color:#8a9ab0; background:none; border:none; padding:0.5rem 0; cursor:pointer; font-family:inherit; border-bottom:2px solid transparent; transition:color 0.2s, border-color 0.2s; }
+    .tab-btn.active { color:#0d1b2a; border-bottom-color:#1a5a8a; }
+    .tab-btn:hover { color:#0d1b2a; }
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+    .asgn-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:1rem; }
+    .asgn-card { background:#fff; border:1px solid #e8edf2; border-radius:14px; overflow:hidden; position:relative; }
+    .asgn-thumb {
+      width:100%; height:160px;
+      background-size:cover;
+      background-position:center;
+      background-color:#1a5a8a;
+      position:relative;
+    }
+    .asgn-thumb-overlay {
+      position:absolute; inset:0;
+      background:linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.45));
+    }
+    .asgn-thumb-title {
+      position:absolute;
+      bottom:12px; left:12px;
+      font-size:18px; font-weight:800;
+      color:#fff;
+      text-shadow:0 1px 4px rgba(0,0,0,0.4);
+    }
+    .asgn-card-actions {
+      position:absolute;
+      top:10px; right:10px;
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .asgn-card-body { padding:0.75rem 1rem; }
+    .asgn-card-lecturer { font-size:13px; color:#5a7a94; margin-bottom:6px; }
+    .asgn-card-time { font-size:12px; color:#8a9ab0; display:flex; align-items:center; gap:4px; }
+    .asgn-card-time svg { width:13px; height:13px; }
+    .add-btn { background:#1a5a8a; color:#fff; border:none; padding:8px 20px; border-radius:8px; font-size:13px; font-weight:600; font-family:inherit; cursor:pointer; transition:background 0.2s; }
+    .add-btn:hover { background:#154d7a; }
+    .edit-btn { background:#1a5a8a; color:#fff; border:none; padding:4px 12px; border-radius:6px; font-size:11px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .delete-btn { background:#c62828; color:#fff; border:none; padding:4px 10px; border-radius:6px; font-size:11px; font-weight:600; font-family:inherit; cursor:pointer; }
+    .empty-state { text-align:center; padding:2rem; color:#8a9ab0; font-size:14px; grid-column:1/-1; }
+    .modal-input {
+      width:100%; padding:10px 14px;
+      border:1.5px solid #e2e8f0;
+      border-radius:8px; font-size:14px;
+      font-family:inherit; outline:none;
+      background:#f8fafc; color:#0d1b2a;
+    }
+    .modal-input:focus { border-color:#1a72c7; background:#fff; }
+    .modal-label { font-size:12px; font-weight:600; color:#5a7a94; margin-bottom:4px; }
+    .modal-field { display:flex; flex-direction:column; gap:4px; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="dashboard.html" class="nav-brand">
+      <div class="nav-brand-icon">
+        <img src="logo-studo.jpeg" alt="STUDO" style="width:24px; height:24px; object-fit:contain;"/>
+      </div>
+      <span class="nav-brand-name">Studo</span>
+    </a>
+    <div class="nav-search">
+      <svg class="nav-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z"/>
+      </svg>
+      <input type="text" placeholder="Search Assignment"/>
+    </div>
+    <div class="nav-right">
+      <div class="nav-bell">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+      </div>
+      <div class="nav-user">
+        <div class="nav-avatar" id="navAvatar">M</div>
+        <div class="nav-user-info">
+          <div class="nav-user-name" id="navName">Mahasiswa</div>
+          <div class="nav-user-role">Student</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- BACK BAR -->
+  <div class="back-bar">
+    <a href="dashboard.html">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+      Back to Dashboard
+    </a>
+  </div>
+
+  <div class="page-content">
+    <div class="dashboard-grid">
+      <div>
+
+        <!-- HERO BANNER -->
+        <div class="hero-banner" style="margin-bottom:1.5rem;">
+          <div class="hero-text">
+            <h2 id="heroName">Welcome Back, Mahasiswa!</h2>
+            <p>Here's your learning progress today.</p>
+            <div class="progress-label">
+              <span>Daily Study Goal</span>
+              <span>55%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:55%;"></div>
+            </div>
+            <div class="progress-note">2 assignment of 4 assignment completed</div>
+          </div>
+          <div class="hero-gpa">
+            <div class="hero-gpa-label">Current GPA</div>
+            <div class="hero-gpa-value">3.45</div>
+          </div>
+        </div>
+
+        <!-- TAB HEADER -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+          <div style="display:flex; gap:2rem;">
+            <button class="tab-btn active" onclick="switchTab('ongoing', this)">On Going</button>
+            <button class="tab-btn" onclick="switchTab('pastdue', this)">Past Due</button>
+            <button class="tab-btn" onclick="switchTab('completed', this)">Completed</button>
+          </div>
+          <button class="add-btn" onclick="openAddModal()">Add Assignment</button>
+        </div>
+        <div style="border-bottom:2px solid #e8edf2; margin-bottom:1.5rem;"></div>
+
+        <!-- ON GOING -->
+        <div class="tab-content active" id="tab-ongoing">
+          <div class="asgn-grid" id="ongoingList">
+            <div class="empty-state">Tidak ada assignment On Going</div>
+          </div>
+        </div>
+
+        <!-- PAST DUE -->
+        <div class="tab-content" id="tab-pastdue">
+          <div class="asgn-grid" id="pastdueList">
+            <div class="empty-state">Tidak ada assignment Past Due</div>
+          </div>
+        </div>
+
+        <!-- COMPLETED -->
+        <div class="tab-content" id="tab-completed">
+          <div class="asgn-grid" id="completedList">
+            <div class="empty-state">Tidak ada assignment Completed</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SIDEBAR -->
+      <div>
+        <div class="profile-card">
+          <div class="profile-card-title">Profile Summary</div>
+          <div class="profile-avatar-wrap" id="sideAvatar">M</div>
+          <div class="profile-name" id="sideName">Mahasiswa</div>
+          <div class="profile-id">Student ID: 535240015</div>
+          <div class="profile-gpa">Current GPA: 3.45</div>
+          <div class="profile-logo">
+            <img src="logo-untar.png" alt="Logo Untar" style="width:80px; height:80px; object-fit:contain;"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL ADD / EDIT -->
+  <div id="addModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:999; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:16px; padding:2rem; width:100%; max-width:420px; display:flex; flex-direction:column; gap:1rem; box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+      <h2 style="font-size:18px; font-weight:700; color:#0d1b2a; margin:0;" id="modalTitle">Add Assignment</h2>
+      <input type="hidden" id="editId"/>
+
+      <div class="modal-field">
+        <div class="modal-label">Mata Kuliah</div>
+        <input type="text" id="inputTitle" placeholder="Nama mata kuliah" class="modal-input"/>
+      </div>
+
+      <div class="modal-field">
+        <div class="modal-label">Nama Dosen</div>
+        <input type="text" id="inputLecturer" placeholder="Nama dosen" class="modal-input"/>
+      </div>
+
+      <div class="modal-field">
+        <div class="modal-label">Status</div>
+        <select id="inputStatus" class="modal-input">
+          <option value="ongoing">On Going</option>
+          <option value="pastdue">Past Due</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+
+      <div class="modal-field">
+        <div class="modal-label">Tanggal Pengumpulan</div>
+        <input type="date" id="inputDate" class="modal-input"/>
+      </div>
+
+      <div class="modal-field">
+        <div class="modal-label">Waktu Pengumpulan</div>
+        <input type="time" id="inputTime" class="modal-input"/>
+      </div>
+
+      <div style="display:flex; gap:8px; margin-top:0.25rem;">
+        <button onclick="saveAssignment()" style="flex:1; padding:10px; background:#1a5a8a; color:#fff; border:none; border-radius:8px; font-size:14px; font-weight:600; font-family:inherit; cursor:pointer;">Save</button>
+        <button onclick="closeAddModal()" style="flex:1; padding:10px; background:#f0f4f8; color:#5a7a94; border:none; border-radius:8px; font-size:14px; font-weight:600; font-family:inherit; cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL KONFIRMASI DELETE -->
+  <div id="deleteModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:999; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:16px; padding:2rem; width:100%; max-width:360px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+      <div style="width:56px; height:56px; background:#fce8e8; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#c62828" stroke-width="2" width="28" height="28">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+        </svg>
+      </div>
+      <h3 style="font-size:17px; font-weight:700; color:#0d1b2a; margin-bottom:8px;">Hapus Assignment?</h3>
+      <p style="font-size:13px; color:#8a9ab0; margin-bottom:1.5rem;">Assignment yang dihapus tidak bisa dikembalikan.</p>
+      <div style="display:flex; gap:8px;">
+        <button onclick="closeDeleteModal()" style="flex:1; padding:10px; background:#f0f4f8; color:#5a7a94; border:none; border-radius:8px; font-size:14px; font-weight:600; font-family:inherit; cursor:pointer;">Batal</button>
+        <button onclick="confirmDelete()" style="flex:1; padding:10px; background:#c62828; color:#fff; border:none; border-radius:8px; font-size:14px; font-weight:600; font-family:inherit; cursor:pointer;">Ya, Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const user = JSON.parse(sessionStorage.getItem('user') || '{"name":"Mahasiswa"}');
+    document.getElementById('navName').textContent = user.name;
+    document.getElementById('navAvatar').textContent = user.name.charAt(0).toUpperCase();
+    document.getElementById('heroName').textContent = `Welcome Back, ${user.name}!`;
+    document.getElementById('sideName').textContent = user.name;
+    document.getElementById('sideAvatar').textContent = user.name.charAt(0).toUpperCase();
+
+    const colors = [
+      'linear-gradient(135deg, #1a5a8a, #2176c7)',
+      'linear-gradient(135deg, #7b5e3a, #c4a26b)',
+      'linear-gradient(135deg, #0d3b6e, #1565c0)',
+      'linear-gradient(135deg, #1b3a2f, #2e7d52)',
+      'linear-gradient(135deg, #4a2c6e, #7b4fa6)',
+      'linear-gradient(135deg, #1b5e20, #388e3c)',
+    ];
+
+    function formatDeadline(deadline) {
+      if (!deadline || deadline === 'No Deadline') return 'No Deadline';
+      const d = new Date(deadline);
+      if (isNaN(d)) return deadline;
+      return d.toLocaleString('en-US', { weekday:'short', month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function openAddModal() {
+      document.getElementById('modalTitle').textContent = 'Add Assignment';
+      document.getElementById('editId').value = '';
+      document.getElementById('inputTitle').value = '';
+      document.getElementById('inputLecturer').value = '';
+      document.getElementById('inputStatus').value = 'ongoing';
+      document.getElementById('inputDate').value = '';
+      document.getElementById('inputTime').value = '';
+      document.getElementById('addModal').style.display = 'flex';
+    }
+
+    function openEditModal(id, title, lecturer, status, deadline) {
+      document.getElementById('modalTitle').textContent = 'Edit Assignment';
+      document.getElementById('editId').value = id;
+      document.getElementById('inputTitle').value = title;
+      document.getElementById('inputLecturer').value = lecturer;
+      document.getElementById('inputStatus').value = status;
+      if (deadline && deadline !== 'No Deadline') {
+        const d = new Date(deadline);
+        if (!isNaN(d)) {
+          document.getElementById('inputDate').value = d.toISOString().split('T')[0];
+          document.getElementById('inputTime').value = d.toTimeString().slice(0,5);
+        }
+      }
+      document.getElementById('addModal').style.display = 'flex';
+    }
+
+    function closeAddModal() {
+      document.getElementById('addModal').style.display = 'none';
+    }
+
+    let deleteTargetId = null;
+
+    function deleteAssignment(id) {
+      deleteTargetId = id;
+      document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+      deleteTargetId = null;
+      document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    async function confirmDelete() {
+      if (!deleteTargetId) return;
+      await fetch(`http://localhost:3000/api/assignments/${deleteTargetId}`, { method: 'DELETE' });
+      closeDeleteModal();
+      loadAssignments();
+    }
+
+    function makeCard(a) {
+      const colorIndex = a.id % colors.length;
+      const deadlineStr = formatDeadline(a.deadline);
+      const safeTitle = a.title.replace(/'/g, "\\'");
+      const safeLecturer = a.lecturer.replace(/'/g, "\\'");
+      const safeDeadline = a.deadline ? a.deadline.replace(/'/g, "\\'") : '';
+      return `
+        <div class="asgn-card">
+          <div class="asgn-thumb" style="background:${colors[colorIndex]};">
+            <div class="asgn-thumb-overlay"></div>
+            <div class="asgn-thumb-title">${a.title}</div>
+          </div>
+          <div class="asgn-card-actions">
+            <button class="edit-btn" onclick="openEditModal(${a.id}, '${safeTitle}', '${safeLecturer}', '${a.status}', '${safeDeadline}')">Edit</button>
+            <button class="delete-btn" onclick="deleteAssignment(${a.id})">Delete</button>
+          </div>
+          <div class="asgn-card-body">
+            <div style="font-size:14px; font-weight:700; color:#0d1b2a; margin-bottom:3px;">${a.title}</div>
+            <div class="asgn-card-lecturer">${a.lecturer}</div>
+            <div class="asgn-card-time">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              ${deadlineStr}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadAssignments() {
+      try {
+        const response = await fetch('http://localhost:3000/api/assignments');
+        const data = await response.json();
+
+        const ongoing = data.filter(a => a.status === 'ongoing');
+        const pastdue = data.filter(a => a.status === 'pastdue');
+        const completed = data.filter(a => a.status === 'completed');
+
+        document.getElementById('ongoingList').innerHTML = ongoing.length
+          ? ongoing.map(makeCard).join('')
+          : '<div class="empty-state">Tidak ada assignment On Going</div>';
+
+        document.getElementById('pastdueList').innerHTML = pastdue.length
+          ? pastdue.map(makeCard).join('')
+          : '<div class="empty-state">Tidak ada assignment Past Due</div>';
+
+        document.getElementById('completedList').innerHTML = completed.length
+          ? completed.map(makeCard).join('')
+          : '<div class="empty-state">Tidak ada assignment Completed</div>';
+
+      } catch (err) {
+        console.error('Gagal load assignments:', err);
+      }
+    }
+
+    async function saveAssignment() {
+      const title = document.getElementById('inputTitle').value.trim();
+      const lecturer = document.getElementById('inputLecturer').value.trim();
+      const status = document.getElementById('inputStatus').value;
+      const date = document.getElementById('inputDate').value;
+      const time = document.getElementById('inputTime').value;
+      const editId = document.getElementById('editId').value;
+
+      if (!title || !lecturer) {
+        alert('Nama mata kuliah dan dosen harus diisi!');
+        return;
+      }
+
+      const deadline = date && time ? new Date(`${date}T${time}`).toISOString() : 'No Deadline';
+      const data = { title, lecturer, status, deadline };
+
+      if (editId) {
+        await fetch(`http://localhost:3000/api/assignments/${editId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      } else {
+        await fetch('http://localhost:3000/api/assignments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      }
+
+      closeAddModal();
+      loadAssignments();
+    }
+
+    loadAssignments();
+  </script>
+</body>
+</html>
